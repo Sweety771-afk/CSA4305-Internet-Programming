@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CSS Layout Debugging</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f2f2f2;
+}
+
+/* Header */
+
+header{
+    background:#0077cc;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+/* Navigation */
+
+nav{
+    background:#333;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    padding:15px 20px;
+}
+
+nav a:hover{
+    background:#555;
+}
+
+/* Layout */
+
+.container{
+    display:flex;
+    gap:20px;
+    padding:20px;
+}
+
+/* Sidebar */
+
+.sidebar{
+    flex:1;
+    background:#ddd;
+    padding:20px;
+}
+
+/* Content */
+
+.content{
+    flex:3;
+    background:white;
+    padding:20px;
+}
+
+/* Cards */
+
+.cards{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+.card{
+    flex:1;
+    min-width:220px;
+    background:#4CAF50;
+    color:white;
+    text-align:center;
+    padding:30px;
+    border-radius:8px;
+}
+
+/* Footer */
+
+footer{
+    background:#0077cc;
+    color:white;
+    text-align:center;
+    padding:15px;
+    margin-top:20px;
+}
+
+/* Tablet */
+
+@media(max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.cards{
+    justify-content:center;
+}
+
+}
+
+/* Mobile */
+
+@media(max-width:480px){
+
+nav{
+    flex-direction:column;
+}
+
+.card{
+    width:100%;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>CSS Layout Debugging</h1>
+</header>
+
+<nav>
+<a href="#">Home</a>
+<a href="#">About</a>
+<a href="#">Services</a>
+<a href="#">Contact</a>
+</nav>
+
+<div class="container">
+
+<div class="sidebar">
+<h2>Sidebar</h2>
+<p>Navigation Links</p>
+</div>
+
+<div class="content">
+
+<h2>Main Content</h2>
+
+<p>
+This layout automatically adjusts to different screen sizes without overlapping.
+</p>
+
+<div class="cards">
+
+<div class="card">Card 1</div>
+
+<div class="card">Card 2</div>
+
+<div class="card">Card 3</div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>© 2026 CSS Layout Debugging Experiment</p>
+
+</footer>
+
+</body>
+</html>
