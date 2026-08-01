@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form Validation</title>
+
+    <style>
+
+        body{
+            font-family:Arial;
+            background:#f2f2f2;
+        }
+
+        .container{
+            width:350px;
+            margin:50px auto;
+            background:white;
+            padding:20px;
+            border-radius:8px;
+            box-shadow:0px 0px 10px gray;
+        }
+
+        h2{
+            text-align:center;
+        }
+
+        input{
+            width:100%;
+            padding:10px;
+            margin-top:8px;
+            margin-bottom:5px;
+        }
+
+        button{
+            width:100%;
+            padding:10px;
+            background:blue;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:darkblue;
+        }
+
+        span{
+            color:red;
+            font-size:14px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Registration Form</h2>
+
+<form>
+
+<label>Email</label>
+
+<input
+type="text"
+id="email"
+placeholder="Enter Email"
+onkeyup="validateEmail()">
+
+<span id="emailError"></span>
+
+<br><br>
+
+<label>Phone Number</label>
+
+<input
+type="text"
+id="phone"
+placeholder="Enter Phone Number"
+onkeyup="validatePhone()">
+
+<span id="phoneError"></span>
+
+<br><br>
+
+<button type="button" onclick="validateForm()">
+Submit
+</button>
+
+</form>
+
+</div>
+
+<script>
+
+function validateEmail(){
+
+var email=document.getElementById("email").value;
+
+var pattern=/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+if(pattern.test(email))
+{
+document.getElementById("emailError").innerHTML="";
+return true;
+}
+else
+{
+document.getElementById("emailError").innerHTML="Invalid Email";
+return false;
+}
+
+}
+
+function validatePhone(){
+
+var phone=document.getElementById("phone").value;
+
+var pattern=/^[6-9][0-9]{9}$/;
+
+if(pattern.test(phone))
+{
+document.getElementById("phoneError").innerHTML="";
+return true;
+}
+else
+{
+document.getElementById("phoneError").innerHTML="Invalid Phone Number";
+return false;
+}
+
+}
+
+function validateForm(){
+
+if(validateEmail() && validatePhone())
+{
+alert("Registration Successful");
+}
+else
+{
+alert("Please Enter Valid Details");
+}
+
+}
+
+</script>
+
+</body>
+</html>
