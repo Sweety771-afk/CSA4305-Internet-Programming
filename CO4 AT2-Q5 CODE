@@ -1,0 +1,218 @@
+<?php
+
+// Initialize variables
+$name = "";
+$email = "";
+$password = "";
+$confirmPassword = "";
+
+$errors = [];
+$success = "";
+
+// Check whether the form was submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Get and clean input
+    $name = trim($_POST["name"] ?? "");
+    $email = trim($_POST["email"] ?? "");
+    $password = $_POST["password"] ?? "";
+    $confirmPassword = $_POST["confirm_password"] ?? "";
+
+
+    // --------------------------------
+    // 1. Validate Name
+    // --------------------------------
+
+    if (empty($name)) {
+
+        $errors[] = "Name is required.";
+
+    } elseif (!preg_match("/^[a-zA-Z ]+$/", $name)) {
+
+        $errors[] = "Name should contain only letters and spaces.";
+    }
+
+
+    // --------------------------------
+    // 2. Validate Email
+    // --------------------------------
+
+    if (empty($email)) {
+
+        $errors[] = "Email is required.";
+
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+        $errors[] = "Please enter a valid email address.";
+    }
+
+
+    // --------------------------------
+    // 3. Validate Password
+    // --------------------------------
+
+    if (empty($password)) {
+
+        $errors[] = "Password is required.";
+
+    } elseif (strlen($password) < 8) {
+
+        $errors[] = "Password must contain at least 8 characters.";
+    }
+
+
+    // --------------------------------
+    // 4. Confirm Password
+    // --------------------------------
+
+    if (empty($confirmPassword)) {
+
+        $errors[] = "Please confirm your password.";
+
+    } elseif ($password !== $confirmPassword) {
+
+        $errors[] = "Passwords do not match.";
+    }
+
+
+    // --------------------------------
+    // 5. Check final validation
+    // --------------------------------
+
+    if (empty($errors)) {
+
+        $success = "Registration successful!";
+
+        // Here you can save the user
+        // to a database.
+
+    }
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>PHP Form Validation</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        form {
+            width: 400px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>User Registration</h1>
+
+
+    <!-- Display error messages -->
+
+    <?php if (!empty($errors)): ?>
+
+        <div class="error">
+
+            <h3>Please correct the following errors:</h3>
+
+            <ul>
+
+                <?php foreach ($errors as $error): ?>
+
+                    <li>
+                        <?php echo htmlspecialchars($error); ?>
+                    </li>
+
+                <?php endforeach; ?>
+
+            </ul>
+
+        </div>
+
+    <?php endif; ?>
+
+
+    <!-- Display success message -->
+
+    <?php if (!empty($success)): ?>
+
+        <p class="success">
+            <?php echo htmlspecialchars($success); ?>
+        </p>
+
+    <?php endif; ?>
+
+
+    <!-- Registration Form -->
+
+    <form method="POST" action="">
+
+        <label>Name:</label>
+
+        <input
+            type="text"
+            name="name"
+            value="<?php echo htmlspecialchars($name); ?>"
+        >
+
+
+        <label>Email:</label>
+
+        <input
+            type="email"
+            name="email"
+            value="<?php echo htmlspecialchars($email); ?>"
+        >
+
+
+        <label>Password:</label>
+
+        <input
+            type="password"
+            name="password"
+        >
+
+
+        <label>Confirm Password:</label>
+
+        <input
+            type="password"
+            name="confirm_password"
+        >
+
+
+        <input
+            type="submit"
+            value="Register"
+        >
+
+    </form>
+
+</body>
+
+</html>
