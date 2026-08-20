@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSP Request Flow</title>
+</head>
+
+<body>
+
+    <h1>JSP Request-Response Example</h1>
+
+    <form action="UserServlet" method="get">
+
+        <label>Enter User ID:</label>
+
+        <input type="text" name="id">
+
+        <input type="submit" value="Search User">
+
+    </form>
+
+</body>
+</html>
+
+
+SERVLET:
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet("/UserServlet")
+public class UserServlet extends HttpServlet {
+
+    protected void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Step 1: Get data from client
+        String id = request.getParameter("id");
+
+        String name = "";
+        String email = "";
+
+        try {
+
+            // Step 2: Load database driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Step 3: Connect to database
+            Connection connection = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/testdb",
+                "root",
+                "password"
+            );
+
+            // Step 4: Create SQL query
+            String sql =
+                "SELECT name, email FROM users WHERE id = ?";
+
+            PreparedStatement statement =
+                connection.prepareStatement(sql);
+
+            statement.setInt(1, Integer.parseInt(id));
+
+            // Step 5: Execute query
+            ResultSet result =
+                statement.executeQuery();
+
+            // Step 6: Extract database result
+            if (result.next()) {
+
+                name = result.getString("name");
+                email = result.getString("email");
+
+            }
+
+            // Step 7: Close database connection
+            result.close();
+            statement.close();
+            connection.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        // Step 8: Store data in request object
+        request.setAttribute("userName", name);
+        request.setAttribute("userEmail", email);
+
+        // Step 9: Forward request to JSP
+        request.getRequestDispatcher("users.jsp")
+               .forward(request, response);
+    }
+}
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>User Details</title>
+</head>
+
+<body>
+
+    <h1>User Details</h1>
+
+    <%
+        String name = (String) request.getAttribute("userName");
+        String email = (String) request.getAttribute("userEmail");
+    %>
+
+    <% if (name != null && !name.isEmpty()) { %>
+
+        <p>
+            <strong>Name:</strong>
+            <%= name %>
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            <%= email %>
+        </p>
+
+    <% } else { %>
+
+        <p>User not found.</p>
+
+    <% } %>
+
+</body>
+
+</html>
