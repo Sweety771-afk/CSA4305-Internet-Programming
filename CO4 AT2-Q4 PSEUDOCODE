@@ -1,0 +1,69 @@
+ALGORITHM RetrieveDataFromDatabase
+
+INPUT:
+    Database details
+    SQL SELECT query
+
+OUTPUT:
+    Retrieved records displayed to the user
+
+BEGIN
+
+    // Step 1: Load database driver
+    LOAD_DATABASE_DRIVER()
+
+    // Step 2: Establish database connection
+    connection ← CONNECT_TO_DATABASE(
+                    databaseURL,
+                    username,
+                    password
+                 )
+
+    IF connection fails THEN
+        DISPLAY "Database connection failed"
+        STOP
+    END IF
+
+    // Step 3: Create SQL query
+    query ← "SELECT id, name, email FROM users"
+
+    // Step 4: Create statement
+    statement ← CREATE_STATEMENT(connection)
+
+    // Step 5: Execute SQL query
+    resultSet ← EXECUTE_QUERY(statement, query)
+
+    // Step 6: Check whether records exist
+    IF resultSet contains no records THEN
+
+        DISPLAY "No records found"
+
+    ELSE
+
+        // Step 7: Process each record
+        WHILE resultSet has next record DO
+
+            id ← GET_VALUE(resultSet, "id")
+            name ← GET_VALUE(resultSet, "name")
+            email ← GET_VALUE(resultSet, "email")
+
+            // Step 8: Display retrieved data
+            DISPLAY "ID: " + id
+            DISPLAY "Name: " + name
+            DISPLAY "Email: " + email
+            DISPLAY "-------------------"
+
+        END WHILE
+
+    END IF
+
+    // Step 9: Close result set
+    CLOSE(resultSet)
+
+    // Step 10: Close statement
+    CLOSE(statement)
+
+    // Step 11: Close database connection
+    CLOSE(connection)
+
+END
