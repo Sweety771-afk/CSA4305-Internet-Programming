@@ -1,0 +1,170 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class DatabaseRetrieval {
+
+    public static void main(String[] args) {
+
+        // Database connection details
+        String url = "jdbc:mysql://localhost:3306/testdb";
+        String username = "root";
+        String password = "password";
+
+        // SQL query
+        String sql = "SELECT id, name, email FROM users";
+
+        try {
+
+            // Step 1: Load MySQL JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Step 2: Establish database connection
+            Connection connection =
+                    DriverManager.getConnection(
+                            url,
+                            username,
+                            password
+                    );
+
+            System.out.println("Database connected successfully.");
+
+            // Step 3: Create PreparedStatement
+            PreparedStatement statement =
+                    connection.prepareStatement(sql);
+
+            // Step 4: Execute SQL query
+            ResultSet resultSet =
+                    statement.executeQuery();
+
+            // Step 5: Process result set
+            boolean found = false;
+
+            while (resultSet.next()) {
+
+                found = true;
+
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+
+                // Step 6: Display retrieved data
+                System.out.println("-------------------------");
+                System.out.println("ID    : " + id);
+                System.out.println("Name  : " + name);
+                System.out.println("Email : " + email);
+            }
+
+            if (!found) {
+                System.out.println("No records found.");
+            }
+
+            // Step 7: Close ResultSet
+            resultSet.close();
+
+            // Step 8: Close Statement
+            statement.close();
+
+            // Step 9: Close Connection
+            connection.close();
+
+            System.out.println("-------------------------");
+            System.out.println("Database connection closed.");
+
+        } catch (Exception e) {
+
+            System.out.println(
+                "Database error: " + e.getMessage()
+            );
+        }
+    }
+}
+
+
+
+
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class DatabaseRetrieval {
+
+    public static void main(String[] args) {
+
+        // Database connection details
+        String url = "jdbc:mysql://localhost:3306/testdb";
+        String username = "root";
+        String password = "password";
+
+        // SQL query
+        String sql = "SELECT id, name, email FROM users";
+
+        try {
+
+            // Step 1: Load MySQL JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Step 2: Establish database connection
+            Connection connection =
+                    DriverManager.getConnection(
+                            url,
+                            username,
+                            password
+                    );
+
+            System.out.println("Database connected successfully.");
+
+            // Step 3: Create PreparedStatement
+            PreparedStatement statement =
+                    connection.prepareStatement(sql);
+
+            // Step 4: Execute SQL query
+            ResultSet resultSet =
+                    statement.executeQuery();
+
+            // Step 5: Process result set
+            boolean found = false;
+
+            while (resultSet.next()) {
+
+                found = true;
+
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+
+                // Step 6: Display retrieved data
+                System.out.println("-------------------------");
+                System.out.println("ID    : " + id);
+                System.out.println("Name  : " + name);
+                System.out.println("Email : " + email);
+            }
+
+            if (!found) {
+                System.out.println("No records found.");
+            }
+
+            // Step 7: Close ResultSet
+            resultSet.close();
+
+            // Step 8: Close Statement
+            statement.close();
+
+            // Step 9: Close Connection
+            connection.close();
+
+            System.out.println("-------------------------");
+            System.out.println("Database connection closed.");
+
+        } catch (Exception e) {
+
+            System.out.println(
+                "Database error: " + e.getMessage()
+            );
+        }
+    }
+}
