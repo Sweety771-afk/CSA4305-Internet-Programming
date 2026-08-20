@@ -1,0 +1,88 @@
+ALGORITHM JSP_Request_Response_Flow
+
+INPUT:
+    Client request from a web browser
+
+OUTPUT:
+    Dynamic HTML response displayed in the browser
+
+BEGIN
+
+    // Step 1: Client initiates a request
+    clientRequest ← USER_REQUEST()
+
+    // Example:
+    // http://localhost:8080/MyApp/user.jsp
+
+    // Step 2: Request is sent to the web server
+    SEND clientRequest TO WEB_SERVER
+
+    // Step 3: Web server receives the request
+    server ← RECEIVE(clientRequest)
+
+    // Step 4: Identify the requested JSP page
+    requestedPage ← GET_REQUESTED_PAGE(clientRequest)
+
+    // Step 5: Check whether JSP has already been compiled
+    IF JSP_PAGE_IS_NOT_COMPILED(requestedPage) THEN
+
+        // Translate JSP into Servlet source code
+        servletSource ← TRANSLATE_JSP_TO_SERVLET(requestedPage)
+
+        // Compile generated Servlet
+        servletClass ← COMPILE(servletSource)
+
+    ELSE
+
+        servletClass ← GET_EXISTING_SERVLET(requestedPage)
+
+    END IF
+
+    // Step 6: Create request and response objects
+    requestObject ← CREATE_HTTP_REQUEST()
+    responseObject ← CREATE_HTTP_RESPONSE()
+
+    // Step 7: Execute the generated Servlet
+    servletResult ← EXECUTE_SERVLET(
+                        servletClass,
+                        requestObject,
+                        responseObject
+                    )
+
+    // Step 8: Servlet/JSP interacts with backend components
+    IF data is required THEN
+
+        // Connect to database or backend service
+        databaseConnection ← CONNECT_TO_DATABASE()
+
+        // Execute query
+        queryResult ← EXECUTE_DATABASE_QUERY(
+                          databaseConnection
+                       )
+
+        // Close database connection
+        CLOSE(databaseConnection)
+
+    END IF
+
+    // Step 9: Generate dynamic content
+    dynamicContent ← GENERATE_HTML(
+                         servletResult,
+                         queryResult
+                     )
+
+    // Step 10: Create HTTP response
+    responseObject ← ADD_CONTENT_TO_RESPONSE(
+                         dynamicContent
+                     )
+
+    // Step 11: Send response to client
+    SEND responseObject TO client
+
+    // Step 12: Browser receives response
+    browser ← RECEIVE(responseObject)
+
+    // Step 13: Browser renders HTML
+    DISPLAY(dynamicContent)
+
+END
