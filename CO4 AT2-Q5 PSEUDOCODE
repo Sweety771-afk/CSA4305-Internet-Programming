@@ -1,0 +1,95 @@
+ALGORITHM ValidateUserInput
+
+INPUT:
+    User registration form containing:
+        Name
+        Email
+        Password
+        Confirm Password
+
+OUTPUT:
+    Error messages for invalid input
+    OR
+    Successful form submission
+
+BEGIN
+
+    // Step 1: Initialize error messages
+    errors ← EMPTY LIST
+
+    // Step 2: Check whether the form was submitted
+    IF REQUEST_METHOD = "POST" THEN
+
+        // Step 3: Read input values
+        name ← TRIM(INPUT["name"])
+        email ← TRIM(INPUT["email"])
+        password ← INPUT["password"]
+        confirmPassword ← INPUT["confirm_password"]
+
+
+        // Step 4: Validate Name
+        IF name is empty THEN
+            ADD "Name is required" TO errors
+
+        ELSE IF name contains invalid characters THEN
+            ADD "Name contains invalid characters" TO errors
+
+        END IF
+
+
+        // Step 5: Validate Email
+        IF email is empty THEN
+            ADD "Email is required" TO errors
+
+        ELSE IF email is not a valid email format THEN
+            ADD "Enter a valid email address" TO errors
+
+        END IF
+
+
+        // Step 6: Validate Password
+        IF password is empty THEN
+            ADD "Password is required" TO errors
+
+        ELSE IF length of password < 8 THEN
+            ADD "Password must contain at least 8 characters"
+            TO errors
+
+        END IF
+
+
+        // Step 7: Confirm Password
+        IF confirmPassword is empty THEN
+            ADD "Please confirm your password" TO errors
+
+        ELSE IF password ≠ confirmPassword THEN
+            ADD "Passwords do not match" TO errors
+
+        END IF
+
+
+        // Step 8: Check validation result
+        IF errors is NOT EMPTY THEN
+
+            // Invalid input
+            DISPLAY all error messages
+
+            DISPLAY the form again
+
+        ELSE
+
+            // All validation successful
+            DISPLAY "Registration successful"
+
+            PROCESS/SAVE USER DATA
+
+        END IF
+
+    ELSE
+
+        // Step 9: Display empty form
+        DISPLAY registration form
+
+    END IF
+
+END
