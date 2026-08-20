@@ -1,0 +1,101 @@
+ALGORITHM ParseXMLDocument
+
+INPUT:
+    XML file containing structured data
+    Example: users.xml or products.xml
+
+OUTPUT:
+    Extracted data displayed in a readable format
+
+BEGIN
+
+    // Step 1: Load the XML file
+    xmlDocument ← LOAD_XML_FILE("users.xml")
+
+    IF xmlDocument cannot be loaded THEN
+        DISPLAY "Error: Unable to load XML file"
+        STOP
+    END IF
+
+
+    // Step 2: Access the root element
+    rootNode ← GET_ROOT_ELEMENT(xmlDocument)
+
+    DISPLAY "Root Element: " + rootNode.name
+
+
+    // Step 3: Traverse the child nodes of the root
+    FOR EACH childNode IN rootNode.children DO
+
+        // Check whether the node is an element
+        IF childNode.type = ELEMENT THEN
+
+            DISPLAY "Element: " + childNode.name
+
+
+            // Step 4: Access attributes of the element
+            IF childNode has attributes THEN
+
+                FOR EACH attribute IN childNode.attributes DO
+                    DISPLAY "  " + attribute.name + ": " 
+                            + attribute.value
+                END FOR
+
+            END IF
+
+
+            // Step 5: Check whether the node contains child elements
+            IF childNode has child elements THEN
+
+                FOR EACH subNode IN childNode.children DO
+
+                    IF subNode.type = ELEMENT THEN
+
+                        DISPLAY "  " + subNode.name 
+                                + ": " + subNode.text
+
+
+                        // Step 6: Handle deeper hierarchical nodes
+                        IF subNode has child elements THEN
+                            CALL TraverseNode(subNode, 4)
+                        END IF
+
+                    END IF
+
+                END FOR
+
+            ELSE
+
+                // Step 7: Extract text value
+                DISPLAY "  Value: " + childNode.text
+
+            END IF
+
+        END IF
+
+    END FOR
+
+END
+
+
+ALGORITHM TraverseNode(node, indentation)
+
+BEGIN
+
+    FOR EACH child IN node.children DO
+
+        IF child.type = ELEMENT THEN
+
+            DISPLAY SPACES(indentation) 
+                    + child.name + ": " + child.text
+
+            // Recursively traverse nested elements
+            IF child has child elements THEN
+                CALL TraverseNode(child, indentation + 2)
+            END IF
+
+        END IF
+
+    END FOR
+
+END
