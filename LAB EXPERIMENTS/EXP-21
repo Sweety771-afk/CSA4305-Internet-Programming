@@ -1,0 +1,106 @@
+import java.util.*;
+
+class Job {
+    int id;
+    String title, company, location;
+
+    Job(int id, String title, String company, String location) {
+        this.id = id;
+        this.title = title;
+        this.company = company;
+        this.location = location;
+    }
+
+    public String toString() {
+        return id + ". " + title + " - " + company + " - " + location;
+    }
+}
+
+public class JobPortal {
+    static Scanner sc = new Scanner(System.in);
+    static ArrayList<Job> jobs = new ArrayList<>();
+    static ArrayList<String> applications = new ArrayList<>();
+    static ArrayList<Job> savedJobs = new ArrayList<>();
+
+    public static void main(String[] args) {
+        jobs.add(new Job(1, "Java Developer", "TCS", "Chennai"));
+        jobs.add(new Job(2, "Web Developer", "Infosys", "Bangalore"));
+        jobs.add(new Job(3, "Data Analyst", "Wipro", "Chennai"));
+        jobs.add(new Job(4, "Software Engineer", "Accenture", "Hyderabad"));
+
+        while (true) {
+            System.out.println("\n--- ONLINE JOB PORTAL ---");
+            System.out.println("1. View Jobs");
+            System.out.println("2. Search Jobs");
+            System.out.println("3. Apply for Job");
+            System.out.println("4. Save Job");
+            System.out.println("5. View Applications");
+            System.out.println("6. Director - View Candidates");
+            System.out.println("7. Exit");
+            System.out.print("Enter choice: ");
+            int ch = sc.nextInt();
+            sc.nextLine();
+
+            switch (ch) {
+                case 1:
+                    for (Job j : jobs)
+                        System.out.println(j);
+                    break;
+
+                case 2:
+                    System.out.print("Enter job title/location: ");
+                    String key = sc.nextLine().toLowerCase();
+                    for (Job j : jobs)
+                        if (j.title.toLowerCase().contains(key) ||
+                            j.location.toLowerCase().contains(key))
+                            System.out.println(j);
+                    break;
+
+                case 3:
+                    System.out.print("Enter Job ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter your name: ");
+                    String name = sc.nextLine();
+                    System.out.print("Enter resume name: ");
+                    String resume = sc.nextLine();
+                    applications.add(name + " applied for Job ID " + id + " | Resume: " + resume);
+                    System.out.println("Application submitted successfully!");
+                    break;
+
+                case 4:
+                    System.out.print("Enter Job ID to save: ");
+                    id = sc.nextInt();
+                    for (Job j : jobs)
+                        if (j.id == id) {
+                            savedJobs.add(j);
+                            System.out.println("Job saved!");
+                        }
+                    break;
+
+                case 5:
+                    if (applications.isEmpty())
+                        System.out.println("No applications.");
+                    else
+                        for (String a : applications)
+                            System.out.println(a);
+                    break;
+
+                case 6:
+                    if (applications.isEmpty())
+                        System.out.println("No candidates available.");
+                    else
+                        for (String a : applications)
+                            System.out.println(a);
+                    break;
+
+                case 7:
+                    System.out.println("Thank you!");
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
